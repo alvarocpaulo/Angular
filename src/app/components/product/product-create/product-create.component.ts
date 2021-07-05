@@ -14,23 +14,23 @@ export class ProductCreateComponent implements OnInit {
 
   product: Product = {
     name: '',
-    price: 0
+    price: null!
   }
 
   constructor(private productService: ProductService, private router: Router) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
   }
 
-  createProduct(): void{
-this.productService.create(this.product).subscribe(() => {
-  this.productService.showMessage('Produto cadastrado')
-  this.router.navigate(['/products'])
-})
+  createProduct(): void {
+    this.productService.create(this.product).subscribe(() => {
+      this.productService.showMessage('Produto cadastrado')
+      this.router.navigate(['/products'])
+    })
 
   }
 
-  cancel(): void{
+  cancel(): void {
     this.productService.showMessage('Ação cancelada pelo usuário. Produto não cadastrado')
     this.router.navigate(['/products'])
   }

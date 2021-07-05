@@ -1,15 +1,16 @@
 import { Product } from './product.model';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { Observable } from 'rxjs';
+import { EMPTY, observable, Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  baseUrl = "http://localhost:3001/posts";
+  baseUrl = "http://localhost:3001/products";
 
   constructor(private snackBar: MatSnackBar, private http: HttpClient) { }
 
@@ -29,14 +30,27 @@ export class ProductService {
     return this.http.get<Product[]>(this.baseUrl)
   }
 
-  readById(id: string): Observable<Product> {    
-    const url = `${this.baseUrl}/%${id}`
+  readById(id: string | null): Observable<Product> {    
+    const url = `${this.baseUrl}/${id}`;
     return this.http.get<Product>(url);
   }
 
   update(product: Product): Observable<Product> {
-    const url = `${this.baseUrl}/%${product.id}`
-    return this.http.put<Product>(url, product)
+    const url = `${this.baseUrl}/${product.id}`;
+    return this.http.put<Product>(url, product);
   }
 
-}
+  delete(id: number): Observable<Product> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.delete<Product>(url)
+    /*.pipe(
+      map((obj) => obj),
+      catchError((e) => this.errorHandler(e))
+    )*/;
+  }
+
+    errorHandler(e: any): Observable<any> {
+      this.showMessage("Ocorreu um erro");
+      return EMPTY;
+    }
+  }
