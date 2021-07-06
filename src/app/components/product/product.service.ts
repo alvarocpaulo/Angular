@@ -14,16 +14,26 @@ export class ProductService {
 
   constructor(private snackBar: MatSnackBar, private http: HttpClient) { }
 
-  showMessage(msg: string): void {
+  showMessage(msg: string, isError: boolean = false): void {
     this.snackBar.open(msg, '', {
       duration: 3000,
       horizontalPosition: "right",
-      verticalPosition: "top"
+      verticalPosition: "top",
+      panelClass: isError ? ['msg-error'] : ['msg-sucess']
     })
   }
 
   create(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.baseUrl, product);
+    return this.http.post<Product>(this.baseUrl, product).pipe(
+      map((obj) => obj),
+      catchError(e => this.errorHandler(e))
+    );
+  }
+
+  errorHandler(e: any): Observable<any> {
+    console.log(e);
+    this.showMessage("Ocorreu um erro. Não foi possível cadastrar o produto", true);
+    return EMPTY;
   }
 
   read(): Observable<Product[]> {
@@ -43,14 +53,8 @@ export class ProductService {
   delete(id: number): Observable<Product> {
     const url = `${this.baseUrl}/${id}`;
     return this.http.delete<Product>(url)
-    /*.pipe(
-      map((obj) => obj),
-      catchError((e) => this.errorHandler(e))
-    )*/;
+    
   }
 
-    errorHandler(e: any): Observable<any> {
-      this.showMessage("Ocorreu um erro");
-      return EMPTY;
-    }
+
   }

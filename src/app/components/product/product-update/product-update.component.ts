@@ -10,9 +10,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProductUpdateComponent implements OnInit {
 
-  product!: Product;
+  product: Product;
 
-  constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private route: ActivatedRoute)
+    { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')
