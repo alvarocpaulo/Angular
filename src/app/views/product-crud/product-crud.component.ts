@@ -15,13 +15,13 @@ export class ProductCrudComponent implements OnInit {
       icon: 'storefront',
       routeUrl: '/products'
     }
-   }
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  navigateToProductCreate(): void{
-    
-  this.router.navigate(['/products/create'])
+  navigateToProductCreate(): void {
+
+    this.router.navigate(['/products/create'])
   }
 
 }
